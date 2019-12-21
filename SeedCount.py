@@ -39,7 +39,7 @@ class myApp(QtWidgets.QMainWindow):
         kernel = np.ones((9,9),np.uint8)
         opening = cv2.morphologyEx(thresh1, cv2.MORPH_OPEN, kernel)
         fgmask = backsub.apply(self.image, None, 0.01)
-        cv2.line(self.image, (0, 30), (1300, 30), (0, 255, 0), 2)
+        cv2.rectangle(self.image, (300, 100), (1000, 600), (0, 0, 255), 2)
         contours, hierarchy = cv2.findContours(fgmask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
         try: hierarchy = hierarchy[0]
         except: hierarchy = []
@@ -54,11 +54,11 @@ class myApp(QtWidgets.QMainWindow):
                 cv2.drawContours(self.image, contour, -1, (0,255,0), 3) # draw contours of every seeds
                 x,y,w,h = cv2.boundingRect(contour)  
 
-                if y>10 and y<40:
-                        sayac+=1
-                        print(sayac)
-        cv2.putText(self.image,"Tohum Sayi: "+str(sayac), (220, 20), cv2.FONT_HERSHEY_SIMPLEX,
-                0.6, (0, 0, 0), 2)
+        #         if y>10 and y<40:
+        #                 sayac+=1
+        #                 print(sayac)
+        # cv2.putText(self.image,"Tohum Sayi: "+str(sayac), (220, 20), cv2.FONT_HERSHEY_SIMPLEX,
+        #         0.6, (0, 0, 0), 2)
 
         #self.image=cv2.flip(self.image,1)
         self.displayImage(self.image,1)
