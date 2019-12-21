@@ -21,6 +21,7 @@ class myApp(QtWidgets.QMainWindow):
         self
         self.btnCameraOpen.clicked.connect(self.startCamera)
         self.btnCameraClose.clicked.connect(self.stopCamera)
+        self.conveyer_speed = 3
         
     def startCamera(self):
         self.capture=cv2.VideoCapture("original video.m4v")
@@ -28,12 +29,15 @@ class myApp(QtWidgets.QMainWindow):
         self.capture.set(cv2.CAP_PROP_FRAME_WIDTH,640)
 
         self.timer=QTimer(self)
+        print('dayandi ...')
+        
         self.timer.timeout.connect(self.update_frame)
+        print('cekdi')
         self.timer.start(5)
-
+        self.sayac=0
     def update_frame(self):
-        sayac=0
-        ret, self.image=self.capture.read()
+        ret, self.image = self.capture.read()
+        time.sleep(self.conveyer_speed/100)
         self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2RGB)
         ret,thresh1 = cv2.threshold(self.image,int(denoise),255,cv2.THRESH_BINARY)
         kernel = np.ones((9,9),np.uint8)
@@ -52,13 +56,13 @@ class myApp(QtWidgets.QMainWindow):
                 cy = int(M['m01']/M['m00'])
                 cv2.circle(self.image,(cx,cy), 5, (0,0,255), -1)
                 cv2.drawContours(self.image, contour, -1, (0,255,0), 3) # draw contours of every seeds
-                x,y,w,h = cv2.boundingRect(contour)  
+                #x,y,w,h = cv2.boundingRect(contour)  
 
-        #         if y>10 and y<40:
-        #                 sayac+=1
-        #                 print(sayac)
-        # cv2.putText(self.image,"Tohum Sayi: "+str(sayac), (220, 20), cv2.FONT_HERSHEY_SIMPLEX,
-        #         0.6, (0, 0, 0), 2)
+                if y>10 and y<40:
+                    self.sayac+=1
+                    print(self.sayac)
+        cv2.putText(self.image,"Tohum Sayi: "+str(self.sayac), (220, 20), cv2.FONT_HERSHEY_SIMPLEX,
+                0.6, (0, 0, 0), 2)
 
         #self.image=cv2.flip(self.image,1)
         self.displayImage(self.image,1)
