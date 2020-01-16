@@ -18,10 +18,9 @@ class myApp(QtWidgets.QMainWindow):
         super(myApp, self).__init__()
         loadUi('program.ui',self)
         self.image=None
-        self
         self.btnCameraOpen.clicked.connect(self.startCamera)
         self.btnCameraClose.clicked.connect(self.stopCamera)
-        self.conveyer_speed = 3
+        #self.conveyer_speed = 3
         
     def startCamera(self):
         self.capture=cv2.VideoCapture("original video.m4v")
@@ -29,15 +28,15 @@ class myApp(QtWidgets.QMainWindow):
         self.capture.set(cv2.CAP_PROP_FRAME_WIDTH,640)
 
         self.timer=QTimer(self)
-        print('dayandi ...')
+        
         
         self.timer.timeout.connect(self.update_frame)
-        print('cekdi')
+        
         self.timer.start(5)
         self.sayac=0
     def update_frame(self):
         ret, self.image = self.capture.read()
-        time.sleep(self.conveyer_speed/100)
+        #time.sleep(self.conveyer_speed/100)
         self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2RGB)
         ret,thresh1 = cv2.threshold(self.image,int(denoise),255,cv2.THRESH_BINARY)
         kernel = np.ones((9,9),np.uint8)
